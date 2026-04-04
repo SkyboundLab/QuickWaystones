@@ -87,7 +87,13 @@ public final class QuickWaystones extends JavaPlugin {
     }
 
     public static void removeWaystone(Location location) {
-        waystonesMap.remove(location);
+        WaystoneData removed = waystonesMap.remove(location);
+        if (removed != null) {
+            String id = removed.getId();
+            for (Set<String> access : playerAccess.values()) {
+                access.remove(id);
+            }
+        }
         saveData();
     }
 
