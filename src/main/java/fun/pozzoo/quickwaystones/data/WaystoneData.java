@@ -6,25 +6,31 @@ import org.bukkit.Location;
 import java.util.UUID;
 
 public class WaystoneData {
-    private final int id;
+    private final String id;
     private String name;
     private final UUID owner;
     private final Location location;
 
     public WaystoneData(Location location, UUID owner) {
-        id = QuickWaystones.getAndIncrementLastWaystoneID();
-        name = "Waystone " + id ;
+        id = UUID.randomUUID().toString();
+        name = "Waystone " + QuickWaystones.getAndIncrementLastWaystoneID();
         this.location = location;
         this.owner = owner;
     }
     public WaystoneData(String name, Location location, UUID owner) {
-        id = QuickWaystones.getAndIncrementLastWaystoneID();
+        id = UUID.randomUUID().toString();
+        this.name = name;
+        this.location = location;
+        this.owner = owner;
+    }
+    public WaystoneData(String id, String name, Location location, UUID owner) {
+        this.id = id;
         this.name = name;
         this.location = location;
         this.owner = owner;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 

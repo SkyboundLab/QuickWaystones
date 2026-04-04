@@ -19,12 +19,12 @@ import java.util.*;
 
 public class WaystoneGUI implements Listener {
 
-    private static final int ROWS = 4;
-    private static final int PAGE_SIZE = 27; // top 3 rows
+    private static final int ROWS = 6;
+    private static final int PAGE_SIZE = 45; // top 5 rows
     private static final int INVENTORY_SIZE = ROWS * 9;
-    private static final int PREV_SLOT = 27 + (3 - 1); // 29
-    private static final int NEXT_SLOT = 27 + (7 - 1); // 33
-    private static final int PAGE_SLOT = 27 + (5 - 1); // 31
+    private static final int PREV_SLOT = 45 + (3 - 1); // 47
+    private static final int NEXT_SLOT = 45 + (7 - 1); // 51
+    private static final int PAGE_SLOT = 45 + (5 - 1); // 49
 
     private static volatile boolean registered = false;
 
@@ -48,13 +48,16 @@ public class WaystoneGUI implements Listener {
 
     private static void openPage(Player player, int page, WaystoneData waystoneData) {
         Map<Location, WaystoneData> waystonesMap = new HashMap<>(QuickWaystones.getWaystonesMap());
-        Map<UUID, Set<Integer>> playerAccess = QuickWaystones.getPlayerAccess();
+        Map<UUID, Set<String>> playerAccess = QuickWaystones.getPlayerAccess();
 
         if (QuickWaystones.getInstance().getConfig().getBoolean("Settings.HideUndiscoveredWaystones")) {
             waystonesMap.entrySet().removeIf(entry -> !playerAccess.get(player.getUniqueId()).contains(entry.getValue().getId()));
         }
 
         List<WaystoneData> waystones = new ArrayList<>(waystonesMap.values());
+        
+        // Sort waystones by name
+        waystones.sort(Comparator.comparing(WaystoneData::getName));
 
         int totalItems = waystones.size();
         int totalPages = Math.max(1, (int) Math.ceil(totalItems / (double) PAGE_SIZE));
@@ -65,13 +68,28 @@ public class WaystoneGUI implements Listener {
         WaystoneHolder holder = new WaystoneHolder(currentPage, totalPages, waystoneData);
         Inventory inv = Bukkit.createInventory(holder, INVENTORY_SIZE, title);
 
-        // Fill page items (top 27 slots)
+        // Fill page items (top 45 slots)
         int startIndex = currentPage * PAGE_SIZE;
         int endIndex = Math.min(startIndex + PAGE_SIZE, totalItems);
         int slot = 0;
         for (int i = startIndex; i < endIndex; i++) {
             WaystoneData ws = waystones.get(i);
-            ItemStack item = new ItemStack(Material.ENDER_PEARL);
+            
+            // Get world-specific icon
+            Material material;
+            switch (ws.getLocation().getWorld().getEnvironment()) {
+                case NETHER:
+                    material = Material.NETHERRACK;
+                    break;
+                case THE_END:
+                    material = Material.END_STONE;
+                    break;
+                default:
+                    material = Material.GRASS_BLOCK;
+                    break;
+            }
+            
+            ItemStack item = new ItemStack(material);
             ItemMeta meta = item.getItemMeta();
             if (meta != null) {
                 meta.displayName(StringUtils.formatItemName(ws.getName()));
@@ -158,7 +176,7 @@ public class WaystoneGUI implements Listener {
         // Waystone teleport
         WaystoneData ws = holder.slotToWaystone.get(slot);
         if (ws != null) {
-            if (ws.getId() == holder.waystoneData.getId()) {
+            if (ws.getId().equals(holder.waystoneData.getId())) {
                 String message = QuickWaystones.getInstance().getConfig().getString("Messages.SameWaystone", "You cannot teleport to the same waystone!");
                 player.sendMessage(StringUtils.formatString("<red>" + message));
                 player.playSound(player, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.1f, 1);

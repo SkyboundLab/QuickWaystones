@@ -45,11 +45,11 @@ public class WaystonePass {
         this.item = item;
     }
 
-    public ItemStack createItem(int waystoneID) {
+    public ItemStack createItem(String waystoneID) {
         ItemStack item = this.item.clone();
         ItemMeta meta = item.getItemMeta();
 
-        meta.getPersistentDataContainer().set(this.bound_waystone_key, PersistentDataType.INTEGER, waystoneID);
+        meta.getPersistentDataContainer().set(this.bound_waystone_key, PersistentDataType.STRING, waystoneID);
         item.setItemMeta(meta);
 
         return item;
@@ -59,8 +59,8 @@ public class WaystonePass {
         return item.getItemMeta().getPersistentDataContainer().get(this.pass_key,  PersistentDataType.BYTE) != null;
     }
 
-    public Integer getWaystoneID(ItemStack item) {
+    public String getWaystoneID(ItemStack item) {
         ItemMeta meta = item.getItemMeta();
-        return meta.getPersistentDataContainer().get(this.bound_waystone_key, PersistentDataType.INTEGER);
+        return meta.getPersistentDataContainer().get(this.bound_waystone_key, PersistentDataType.STRING);
     }
 }

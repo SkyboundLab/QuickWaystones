@@ -36,7 +36,7 @@ public class OnPlayerInteract implements Listener {
         ItemStack item = player.getInventory().getItemInMainHand();
 
         if (this.plugin.getConfig().getBoolean("Settings.EnableWaystonePass") && item.getType() == Material.PAPER && QuickWaystones.getWaystonePass().checkKey(item) && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
-            int waystoneID = QuickWaystones.getWaystonePass().getWaystoneID(item);
+            String waystoneID = QuickWaystones.getWaystonePass().getWaystoneID(item);
 
             if (QuickWaystones.getPlayerAccess().get(player.getUniqueId()).contains(waystoneID)) {
                 player.playSound(player, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.1f, 1);
@@ -47,6 +47,7 @@ public class OnPlayerInteract implements Listener {
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             player.sendMessage(StringUtils.formatString("<gold>" + this.plugin.getConfig().getString("Messages.WaystoneDiscovered")));
             QuickWaystones.getPlayerAccess().get(player.getUniqueId()).add(waystoneID);
+            QuickWaystones.saveData();
 
             return;
         }
@@ -68,6 +69,7 @@ public class OnPlayerInteract implements Listener {
             QuickWaystones.createWaystone(location, new WaystoneData(location, player.getUniqueId()));
 
             QuickWaystones.getPlayerAccess().get(player.getUniqueId()).add(QuickWaystones.getWaystonesMap().get(location).getId());
+            QuickWaystones.saveData();
 
             return;
         }
@@ -82,6 +84,7 @@ public class OnPlayerInteract implements Listener {
 
                 QuickWaystones.getWaystone(location).setName(textComponent.content());
                 player.getInventory().getItemInMainHand().subtract();
+                QuickWaystones.saveData();
 
                 return;
             }
@@ -104,9 +107,11 @@ public class OnPlayerInteract implements Listener {
                 player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                 player.sendMessage(StringUtils.formatString("<gold>" + this.plugin.getConfig().getString("Messages.WaystoneDiscovered")));
                 QuickWaystones.getPlayerAccess().get(player.getUniqueId()).add(QuickWaystones.getWaystonesMap().get(location).getId());
+                QuickWaystones.saveData();
             }
         } else {
             QuickWaystones.getPlayerAccess().get(player.getUniqueId()).add(QuickWaystones.getWaystonesMap().get(location).getId());
+            QuickWaystones.saveData();
         }
 
         WaystoneGUI.runGUI(player, QuickWaystones.getWaystonesMap().get(location));

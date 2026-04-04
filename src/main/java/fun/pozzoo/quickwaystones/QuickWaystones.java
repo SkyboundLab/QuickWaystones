@@ -17,7 +17,7 @@ public final class QuickWaystones extends JavaPlugin {
     private static QuickWaystones plugin;
     private static DataManager dataManager;
     private static final Map<Location, WaystoneData> waystonesMap = new HashMap<>();
-    private static final Map<UUID, Set<Integer>> playerAccess = new HashMap<>();
+    private static final Map<UUID, Set<String>> playerAccess = new HashMap<>();
     private static int lastWaystoneID = 0;
     private static WaystonePass waystonePass;
     private static Metrics metrics;
@@ -41,7 +41,13 @@ public final class QuickWaystones extends JavaPlugin {
         waystonePass = new WaystonePass(plugin, "waystone_pass", "bound_waystone");
 
         OptionalInt maxId = waystonesMap.values().stream()
-                .mapToInt(WaystoneData::getId)
+                .mapToInt(ws -> {
+                    try {
+                        return Integer.parseInt(ws.getName().replace("Waystone ", ""));
+                    } catch (NumberFormatException e) {
+                        return 0;
+                    }
+                })
                 .max();
 
         if (maxId.isPresent()) {
@@ -94,7 +100,7 @@ public final class QuickWaystones extends JavaPlugin {
         return waystonesMap.get(location);
     }
 
-    public static Map<UUID, Set<Integer>> getPlayerAccess() {
+    public static Map<UUID, Set<String>> getPlayerAccess() {
         return playerAccess;
     }
 

@@ -8,3 +8,18 @@
 /dataSources.local.xml
 /target
 /.idea
+
+# Eclipse
+.settings
+.classpath
+.project
+.factorypath
+
+# VS Code
+.vscode
+
+# macOS
+.DS_Store
+
+# Maven
+dependency-reduced-pom.xml
