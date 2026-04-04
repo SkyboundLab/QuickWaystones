@@ -2,6 +2,7 @@
 QuickWaystones is a Minecraft plugin that brings the convenience of instant travel to your worlds with the introduction of waystones. Seamlessly teleport between locations and enhance your gameplay experience.
 
 ## Changes Over Original
+- **More Saving:** Saves data when discovering waystones, renaming waystones, and using waystone passes (in addition to the existing saves on creation/removal).
 - **Bigger Menus:** Instead of a single chest, it now uses a double chest so you can see more per page (45 items vs 27).
 - **UUIDs for IDs:** Allows multiple waystones to have the same name and not override each other.
 - **World Specific Icons:** The 3 dimensions in Minecraft have their own block as the icon in the menu (Grass Block, Netherrack, End Stone).
