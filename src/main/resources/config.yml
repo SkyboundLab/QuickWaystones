@@ -1,6 +1,7 @@
 Settings:
   HideUndiscoveredWaystones: true
   EnableWaystonePass: true
+  ConsumeWaystonePass: false
   XpCost: 5
 Messages:
   WaystoneActivated: "Waystone Activated"

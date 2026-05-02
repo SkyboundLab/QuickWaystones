@@ -38,6 +38,8 @@ public class OnPlayerInteract implements Listener {
         if (this.plugin.getConfig().getBoolean("Settings.EnableWaystonePass") && item.getType() == Material.PAPER && QuickWaystones.getWaystonePass().checkKey(item) && (event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)) {
             String waystoneID = QuickWaystones.getWaystonePass().getWaystoneID(item);
 
+            QuickWaystones.getPlayerAccess().computeIfAbsent(player.getUniqueId(), k -> new HashSet<>());
+
             if (QuickWaystones.getPlayerAccess().get(player.getUniqueId()).contains(waystoneID)) {
                 player.playSound(player, Sound.ENTITY_GENERIC_EXTINGUISH_FIRE, 0.1f, 1);
                 player.sendMessage(StringUtils.formatString("<gold>" + this.plugin.getConfig().getString("Messages.WaystoneAlreadyDiscovered")));
@@ -48,6 +50,10 @@ public class OnPlayerInteract implements Listener {
             player.sendMessage(StringUtils.formatString("<gold>" + this.plugin.getConfig().getString("Messages.WaystoneDiscovered")));
             QuickWaystones.getPlayerAccess().get(player.getUniqueId()).add(waystoneID);
             QuickWaystones.saveData();
+
+            if (this.plugin.getConfig().getBoolean("Settings.ConsumeWaystonePass", false)) {
+                item.setAmount(item.getAmount() - 1);
+            }
 
             return;
         }

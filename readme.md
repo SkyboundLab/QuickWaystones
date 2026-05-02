@@ -7,6 +7,7 @@ QuickWaystones is a Minecraft plugin that brings the convenience of instant trav
 - **UUIDs for IDs:** Allows multiple waystones to have the same name and not override each other.
 - **World Specific Icons:** The 3 dimensions in Minecraft have their own block as the icon in the menu (Grass Block, Netherrack, End Stone).
 - **Alphabetical Sorting:** Waystones are now sorted alphabetically by name in the GUI.
+- **Consumable Passes:** Optional setting to remove waystone passes after use (`/quickwaystones setConsumeWaystonePass <true|false>`).
 
 ## Features
 ### 🚩 **Place and Use Waystones**

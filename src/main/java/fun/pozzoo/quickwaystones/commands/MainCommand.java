@@ -22,6 +22,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
         // Register subcommands
         subCommands.put("setHideUndiscoveredWaystones", new SetHideUndiscoveredWaystones(plugin));
         subCommands.put("setEnableWaystonePass", new SetEnableWaystonePass(plugin));
+        subCommands.put("setConsumeWaystonePass", new SetConsumeWaystonePass(plugin));
         subCommands.put("setXpCost", new SetXpCost(plugin));
         subCommands.put("help", new HelpSubCommand(subCommands));
     }
@@ -68,7 +69,7 @@ public class MainCommand implements CommandExecutor, TabCompleter {
                     .toList();
         }
 
-        if (args.length == 2 && (args[0].equals("setHideUndiscoveredWaystones") || args[0].equals("setEnableWaystonePass"))) {
+        if (args.length == 2 && (args[0].equals("setHideUndiscoveredWaystones") || args[0].equals("setEnableWaystonePass") || args[0].equals("setConsumeWaystonePass"))) {
             return Stream.of("true", "false")
                     .filter(v -> v.startsWith(args[1].toLowerCase()))
                     .toList();
